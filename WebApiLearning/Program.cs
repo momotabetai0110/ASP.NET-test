@@ -1,4 +1,9 @@
+using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
+
+//DB設定
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite("Data Source=app.db"));
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -29,11 +34,13 @@ app.MapGet("/api/param/{name}",(string name)=>{
 .WithDescription("入力したパラメータを返します");
 
 //POST API
-app.MapPost("/api/user",(UserRequest request)=>
+app.MapPost("/api/user", async (UserRequest request, AppDbContext db) =>
 {
-    var message = $"こんにちは、{request.Name}さん（{request.Age}歳）！";
-    return Results.Ok(new {message});
-    })
+    var user = new User { Name = request.Name, Age = request.Age };
+    db.Users.Add(user);
+    await db.SaveChangesAsync();
+    return Results.Created($"/api/user/{user.Id}", user);
+})
 .WithName("PostUser")
 .WithDescription("POST形式のAPI");
 
