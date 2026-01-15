@@ -13,11 +13,20 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+//Hello API
 app.MapGet("/api/hello",()=>{
     return Results.Ok(new {message = "こんにちは!ASP.NET Core Web APIへようこそ!"});
 })
 .WithName("GetHello")
 .WithDescription("簡単な挨拶メッセージを返します。");
+
+//Param API
+app.MapGet("/api/param/{name}",(string name)=>{
+    return Results.Ok(new {message = $"Param = {name}"});
+})
+.WithName("GetParam")
+.WithDescription("入力したパラメータを返します");
 
 var summaries = new[]
 {
