@@ -28,6 +28,15 @@ app.MapGet("/api/param/{name}",(string name)=>{
 .WithName("GetParam")
 .WithDescription("入力したパラメータを返します");
 
+//POST API
+app.MapPost("/api/user",(UserRequest request)=>
+{
+    var message = $"こんにちは、{request.Name}さん（{request.Age}歳）！";
+    return Results.Ok(new {message});
+    })
+.WithName("PostUser")
+.WithDescription("POST形式のAPI");
+
 var summaries = new[]
 {
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -52,4 +61,10 @@ app.Run();
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 {
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+}
+
+public class UserRequest
+{
+    public string Name {get; set;} = "";
+    public int Age {get; set;}
 }
