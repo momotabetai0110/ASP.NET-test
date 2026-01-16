@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 var builder = WebApplication.CreateBuilder(args);
 
 //DB設定
@@ -20,15 +21,17 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 //Hello API
-app.MapGet("/api/hello",()=>{
-    return Results.Ok(new {message = "こんにちは!ASP.NET Core Web APIへようこそ!"});
+app.MapGet("/api/hello", () =>
+{
+    return Results.Ok(new { message = "こんにちは!ASP.NET Core Web APIへようこそ!" });
 })
 .WithName("GetHello")
 .WithDescription("簡単な挨拶メッセージを返します。");
 
 //Param API
-app.MapGet("/api/param/{name}",(string name)=>{
-    return Results.Ok(new {message = $"Param = {name}"});
+app.MapGet("/api/param/{name}", (string name) =>
+{
+    return Results.Ok(new { message = $"Param = {name}" });
 })
 .WithName("GetParam")
 .WithDescription("入力したパラメータを返します");
@@ -44,6 +47,25 @@ app.MapPost("/api/user", async (UserRequest request, AppDbContext db) =>
 .WithName("PostUser")
 .WithDescription("POST形式のAPI");
 
+//Face API
+app.MapPost("/api/Face", async (FaceRequest request, AppDbContext db) =>
+{
+    var faceLog = new FaceLog
+    {
+        BirthDate = request.BirthDate,
+        Gender = request.Gender,
+        Job = request.Job,
+        EarlySociable = request.EarlySociable,
+        MidSociable = request.MidSociable,
+        LateSociable = request.LateSociable
+    };
+    db.FaceLogs.Add(faceLog);
+    await db.SaveChangesAsync();
+    return Results.Created($"/api/Face/{faceLog.Id}", faceLog);
+})
+.WithName("PostFace")
+.WithDescription("FaceLogを登録するAPI");
+
 var summaries = new[]
 {
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -51,7 +73,7 @@ var summaries = new[]
 
 app.MapGet("/weatherforecast", () =>
 {
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
+    var forecast = Enumerable.Range(1, 5).Select(index =>
         new WeatherForecast
         (
             DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
@@ -72,6 +94,16 @@ record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 
 public class UserRequest
 {
-    public string Name {get; set;} = "";
-    public int Age {get; set;}
+    public string Name { get; set; } = "";
+    public int Age { get; set; }
+}
+
+public class FaceRequest
+{
+    public DateTime BirthDate { get; set; }
+    public bool Gender { get; set; }
+    public string Job { get; set; } = "";
+    public int EarlySociable { get; set; }
+    public int MidSociable { get; set; }
+    public int LateSociable { get; set; }
 }
