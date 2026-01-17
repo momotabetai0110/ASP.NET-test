@@ -50,6 +50,23 @@ app.MapPost("/api/user", async (UserRequest request, AppDbContext db) =>
 //Face API
 app.MapPost("/api/Face", async (FaceRequest request, AppDbContext db) =>
 {
+    //　レスポンスを作成
+    var sociableSum = request.EarlySociable + request.MidSociable + request.LateSociable;
+    var message = "";
+    if (sociableSum >= 15)
+    {
+        message = "明るいんですね！";
+    }
+    else if (sociableSum >= 10)
+    {
+        message = "暗いんですね!";
+    }
+    else
+    {
+        message = "きもw";
+    }
+
+    //DBにinsert
     var faceLog = new FaceLog
     {
         BirthDate = request.BirthDate,
@@ -61,7 +78,7 @@ app.MapPost("/api/Face", async (FaceRequest request, AppDbContext db) =>
     };
     db.FaceLogs.Add(faceLog);
     await db.SaveChangesAsync();
-    return Results.Created($"/api/Face/{faceLog.Id}", faceLog);
+    return Results.Created($"/api/Face/{faceLog.Id}", message);
 })
 .WithName("PostFace")
 .WithDescription("FaceLogを登録するAPI");
