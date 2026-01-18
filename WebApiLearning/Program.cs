@@ -2,6 +2,19 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 var builder = WebApplication.CreateBuilder(args);
 
+//CORS設定
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy
+            .AllowAnyOrigin()   // すべてのアクセス元を許可
+            .AllowAnyHeader()   // すべてのヘッダーを許可
+            .AllowAnyMethod();  // GET/POSTなど全許可
+    });
+});
+builder.Services.AddControllers();
+
 //DB設定
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite("Data Source=app.db"));
@@ -11,6 +24,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -78,7 +93,7 @@ app.MapPost("/api/Face", async (FaceRequest request, AppDbContext db) =>
     };
     db.FaceLogs.Add(faceLog);
     await db.SaveChangesAsync();
-    return Results.Created($"/api/Face/{faceLog.Id}", message);
+    return Results.Created($"/api/Face/{faceLog.Id}", new { response = message });
 })
 .WithName("PostFace")
 .WithDescription("FaceLogを登録するAPI");
@@ -102,6 +117,9 @@ app.MapGet("/weatherforecast", () =>
 })
 .WithName("GetWeatherForecast");
 
+//CORS有効化
+app.UseCors();
+app.MapControllers();
 app.Run();
 
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
