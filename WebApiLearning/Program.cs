@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
+using WebApiLearning.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 //CORS設定
@@ -22,6 +23,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddScoped<IFaceDiagnosisService, FaceDiagnosisService>();
 
 var app = builder.Build();
 
