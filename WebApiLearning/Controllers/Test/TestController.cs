@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MyApp.Namespace
+namespace MyApp.Controllers.Test
 {
     [Route("api/test")]
     [ApiController]

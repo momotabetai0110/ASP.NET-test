@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WebApiLearning.Services;
 
-namespace MyApp.Namespace
+namespace MyApp.Controllers.Face
 {
     [Route("api/face-diagnosis")]
     [ApiController]
