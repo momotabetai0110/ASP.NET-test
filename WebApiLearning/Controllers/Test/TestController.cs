@@ -7,5 +7,11 @@ namespace MyApp.Controllers.Test
     [ApiController]
     public class TestController : ControllerBase
     {
+        //テスト用
+        [HttpGet]
+        public IActionResult Get()
+        {
+            return Ok("TestOK");
+        }
     }
 }
