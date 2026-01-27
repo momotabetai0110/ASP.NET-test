@@ -1,15 +1,19 @@
 using Microsoft.EntityFrameworkCore;
+using MyApp.Models.Test;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+
+namespace MyApp.Data;
 
 public class AppDbContext : DbContext
 {
     public DbSet<User> Users { get; set; }
     public DbSet<FaceLog> FaceLogs {get; set;}
+    public DbSet<TestEntity> Tests { get; set; }
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
     }
-     public DbSet<Test> Tests { get; set; }
+
 }
 
 public class User
