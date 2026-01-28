@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Net.Http.Headers;
 using MyApp.Models.Test;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,8 +9,10 @@ namespace MyApp.Data;
 public class AppDbContext : DbContext
 {
     public DbSet<User> Users { get; set; }
-    public DbSet<FaceLog> FaceLogs {get; set;}
+    public DbSet<FaceLog> FaceLogs { get; set; }
     public DbSet<TestEntity> Tests { get; set; }
+
+    public DbSet<NightRain> NightRains { get; set; }
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
     }
@@ -26,28 +29,37 @@ public class User
 
 public class FaceLog
 {
-    public int Id {get; set;}
+    public int Id { get; set; }
 
     [Required]
-    public DateTime BirthDate {get; set;}
+    public DateTime BirthDate { get; set; }
 
     [Required]
-    public bool Gender {get; set;}
+    public bool Gender { get; set; }
 
     [Required]
     [MaxLength(100)]
-    public string Job {get; set;} = "";
+    public string Job { get; set; } = "";
 
     [Required]
     [Range(1, 10)]
-    public int EarlySociable {get; set;}
+    public int EarlySociable { get; set; }
     [Required]
     [Range(1, 10)]
-    public int MidSociable {get; set;}
+    public int MidSociable { get; set; }
     [Required]
     [Range(1, 10)]
-    public int LateSociable {get; set;}
+    public int LateSociable { get; set; }
 
     [Required]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+}
+
+public class NightRain
+{
+    public int Id { get; set; }
+
+    public int Bosses { get; set; }
+
+    public int TerrainEffect{get; set;}
 }
