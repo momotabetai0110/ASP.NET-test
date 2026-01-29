@@ -1,11 +1,12 @@
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
 using WebApiLearning.Services;
 using MyApp.Data;
 using MyApp.Services.Test;
+using MyApp.Services.NightRain;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<ITestService, TestService>();
+builder.Services.AddScoped<INightRainService,NightRainService>();
 //CORS設定
 builder.Services.AddCors(options =>
 {

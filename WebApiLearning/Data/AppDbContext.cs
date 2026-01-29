@@ -1,8 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Net.Http.Headers;
+using MyApp.Models.NightRain;
 using MyApp.Models.Test;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MyApp.Data;
 
@@ -12,7 +11,7 @@ public class AppDbContext : DbContext
     public DbSet<FaceLog> FaceLogs { get; set; }
     public DbSet<TestEntity> Tests { get; set; }
 
-    public DbSet<NightRain> NightRains { get; set; }
+    public DbSet<NightRainEntity> NightRains { get; set; }
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
     }
@@ -61,5 +60,5 @@ public class NightRain
 
     public int Bosses { get; set; }
 
-    public int TerrainEffect{get; set;}
+    public int TerrainEffect { get; set; }
 }
