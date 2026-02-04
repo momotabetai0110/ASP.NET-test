@@ -17,7 +17,7 @@ public class NightRainService : INightRainService
             //地変の抽選
             //地変は25%
             int terrainEffectId;
-            bool isTerrain = (_random.Next(1, 5) % 2) == 0;
+            bool isTerrain = _random.Next(1, 6) == 1;
             if (isTerrain)
             //地変がある場合
             {
@@ -33,8 +33,8 @@ public class NightRainService : INightRainService
             bool isEver = false;
             int bossesId = _random.Next(1, 11);
 
-            if (dto.IsEverIncluded && _random.Next(0, 2) == 0 && bossesId < 9)
-            //常夜を含めるがONかつボスが1～8かつ50％で常世フラグをON
+            if (dto.IsEverIncluded && _random.Next(0, 3) == 0 && bossesId < 9)
+            //常夜を含めるがONかつボスが1～8かつ1/3で常世フラグをON
             {
                 isEver = true;
             }
