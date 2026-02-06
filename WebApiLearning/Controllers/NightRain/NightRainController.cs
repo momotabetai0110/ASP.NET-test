@@ -8,7 +8,8 @@ namespace MyApp.Controllers.NightRain;
 public class NightRainController : ControllerBase
 {
     private readonly INightRainService _service;
-    public NightRainController(INightRainService service){
+    public NightRainController(INightRainService service)
+    {
         _service = service;
     }
     private readonly Random _random = new Random();
@@ -17,6 +18,13 @@ public class NightRainController : ControllerBase
     public IActionResult Post([FromBody] NightRainRequestDto dto)
     {
         var result = _service.Create(dto);
+        return Ok(result);
+    }
+
+    [HttpGet]
+    public IActionResult get()
+    {
+        var result = _service.Get();
         return Ok(result);
     }
 

@@ -1,5 +1,10 @@
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using MyApp.Data;
 using MyApp.Models.NightRain;
+using NuGet.Protocol.Plugins;
 namespace MyApp.Services.NightRain;
 public class NightRainService : INightRainService
 {
@@ -57,5 +62,47 @@ public class NightRainService : INightRainService
 
         return results;
 
+    }
+
+    public object Get()
+    {
+        decimal allGachaCount = _db.NightRains.Count();
+
+        //全てのボスの出現回数とその確率を集計
+        var bossesStatistics = new List<BossStatisticsDto>();
+        for (int i = 1; i < 11; i++)
+        {
+            decimal bossCount = _db.NightRains.Where(x => x.BossesId == i).Count();
+            var bossProbability = Math.Round(bossCount / allGachaCount * 100, 2);
+
+            bossesStatistics.Add(new BossStatisticsDto
+            {
+                BossId = i,
+                Count = (int)bossCount,
+                Probability = bossProbability
+            });
+        }
+
+        //全ての地変の出現回数とその確率を集計
+        var terrainStatistics = new List<TerrainStatisticsDto>();
+        for (int i = 0; i < 6; i++)
+        {
+            decimal terrainCount = _db.NightRains.Where(x => x.TerrainEffectId == i).Count();
+            var terrainProbability = Math.Round(terrainCount / allGachaCount * 100, 2);
+
+            terrainStatistics.Add(new TerrainStatisticsDto
+            {
+                TerrainId = i,
+                Count = (int)terrainCount,
+                Probability = terrainProbability
+            });
+        }
+
+        return new NightRainStatisticsResponseDto
+        {
+            AllCount = (int)allGachaCount,
+            Bosses = bossesStatistics,
+            Terrains = terrainStatistics
+        };
     }
 }
